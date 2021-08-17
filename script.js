@@ -1,11 +1,12 @@
 const FONT_SIZE = 200;
+const EMPTY_PIXEL = [0,0,0,0];
 const d = document.getElementById("debug");
 
 function c(...args) {
     d.innerHTML=args.join(', ')
 }
 
-var animation
+let animationId;
 
 (function name() {
     const canvas = document.getElementById("canvas");
@@ -25,41 +26,58 @@ var animation
     ctx.fillText(string, 0, 0);
     // ctx.fillText(string, ww, hh);
 
-    const o = 100;
+    const o = 40;
     var image = ctx.getImageData(0, 0, o, o);
     var pixels = image.data;
 
     console.log(image);
 
     // ctx.putImageData({ ... }, w-100, h-100);
+    const limit = o*o*4; 
     const oo = 200;
     count = 0;
     countY = 0;
-
+    
     function loop() {
-        console.log('request', count);
-        const color = [];
-        for (let j=0; j<4; j++) {
-            color.push(pixels[count+j]);
-        }
+        const color = getPixelColor(count);
+        console.log('trigger', count, limit, color);
         p = count/4;
         y = Math.floor(p/o);
-        x =   p- (y*o);
-        console.log();
+        x = p - (y*o);
         const imageData = new ImageData(Uint8ClampedArray.from(color), 1,1);
         ctx.putImageData(imageData, oo+x,oo+y)
-        if (count >= pixels.length) {
-            console.log('count', stop);
-            cancelAnimationFrame(animation)
+        if (count >= limit) {
+            return;
         }
         count += 4;
-        animation = requestAnimationFrame(() => loop());
+
+        while(true) {
+            if (isEmptyPixel(getPixelColor(count))) {
+                count+=4;
+            } else {
+                break;
+            }
+        }
+        animationId = requestAnimationFrame(loop);
     }
 
-    loop()
+loop();
 
-    
-
-
+function getPixelColor(position) {
+    const color = [];
+    for (let j=0; j<4; j++) {
+        color.push(pixels[position+j]);
+    }
+    return color;
+}
 
 })();
+
+function isEmptyPixel(array) {
+    for (let i =0; i < EMPTY_PIXEL.length; i++) {
+        if (EMPTY_PIXEL[i] !== array[i]) {
+            return false;
+        }
+    }
+    return true;
+}
