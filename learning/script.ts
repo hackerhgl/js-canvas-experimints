@@ -10,18 +10,18 @@ import { PIXEL_SIZE } from "../constants";
     const string = "Hamza Iqbal";
     drawText(ctx, string);
 
-    const size: Size = {width: 80, height: 60};
+    const size: Size = {width: 80, height: 20};
 
     var image = ctx.getImageData(0, 0, size.width, size.height);
     var pixels = image.data;
     const limit = size.width*size.height*PIXEL_SIZE; 
     const oo = 200;
     let count = 0;
-    const chunks: Offset = {x:9, y:4}; 
+    const chunks: Offset = {x:9, y:3}; 
     
     function loop() {
         const pixelChunks = getChunksOfPixelColor(pixels, count, chunks, size);
-        const p = count/4;
+        const p = count/PIXEL_SIZE;
         const y = Math.floor(p/size.width);
         const x = p - (y*size.width);
 
@@ -29,6 +29,7 @@ import { PIXEL_SIZE } from "../constants";
         const imageData = new ImageData(Uint8ClampedArray.from(pixelChunks.colors), pixelChunks.x, pixelChunks.y);
         ctx.putImageData(imageData, oo+x,oo+y)
         if (count >= limit) {
+            console.log(count,limit,pixelChunks.y);
             return;
         }
         count += PIXEL_SIZE * pixelChunks.x;

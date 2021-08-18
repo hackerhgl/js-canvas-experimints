@@ -15,25 +15,19 @@ export function getChunksOfPixelColor(pixels:Uint8ClampedArray,  position: numbe
     const yMax = Math.min(chunks.y);
     const rendered = {...chunks};
     const index = position / PIXEL_SIZE;
-    for (let y = 0; y < yMax; y++) {
+    const indexSizeWidth = Math.floor(index/size.width) * size.width;
 
+    for (let y = 0; y < yMax; y++) {
         const yPosition = y * size.width * PIXEL_SIZE;
         let xMax = (position + (chunks.x * PIXEL_SIZE));
 
-        const xMaxIndex = xMax /4;
-        const sxMax = Math.floor(xMaxIndex/ size.width);
-        const sxMaxWidth = sxMax * size.width;
-        const xWidth = Math.floor(index/size.width);
-        const xMaxWidth = xWidth * size.width;
-        // const safeWidth = ;
-        console.log('index:', index, xMaxIndex, xMax, size.width, 'w', xMaxWidth,  sxMaxWidth);
+        const xMaxIndex = xMax / PIXEL_SIZE;
+        const xsSafeMaxWidth = Math.floor(xMaxIndex / size.width) * size.width;
+        
 
-        if (sxMaxWidth !== xMaxWidth && xMaxIndex > sxMaxWidth) {
-            rendered.x = chunks.x - (xMaxIndex - sxMaxWidth) ;
+        if (xsSafeMaxWidth !== indexSizeWidth && xMaxIndex > xsSafeMaxWidth) {
+            rendered.x = chunks.x - (xMaxIndex - xsSafeMaxWidth) ;
             xMax = position + (rendered.x * PIXEL_SIZE);
-
-            
-
         }
 
         for (let x = position; x < xMax; x++) {

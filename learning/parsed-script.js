@@ -45,20 +45,16 @@ function getChunksOfPixelColor(pixels, position, chunks, size) {
   var rendered = __assign({}, chunks);
 
   var index = position / _constants__WEBPACK_IMPORTED_MODULE_0__.PIXEL_SIZE;
+  var indexSizeWidth = Math.floor(index / size.width) * size.width;
 
   for (var y = 0; y < yMax; y++) {
     var yPosition = y * size.width * _constants__WEBPACK_IMPORTED_MODULE_0__.PIXEL_SIZE;
     var xMax = position + chunks.x * _constants__WEBPACK_IMPORTED_MODULE_0__.PIXEL_SIZE;
-    var xMaxIndex = xMax / 4;
-    var sxMax = Math.floor(xMaxIndex / size.width);
-    var sxMaxWidth = sxMax * size.width;
-    var xWidth = Math.floor(index / size.width);
-    var xMaxWidth = xWidth * size.width; // const safeWidth = ;
+    var xMaxIndex = xMax / _constants__WEBPACK_IMPORTED_MODULE_0__.PIXEL_SIZE;
+    var xsSafeMaxWidth = Math.floor(xMaxIndex / size.width) * size.width;
 
-    console.log('index:', index, xMaxIndex, xMax, size.width, 'w', xMaxWidth, sxMaxWidth);
-
-    if (sxMaxWidth !== xMaxWidth && xMaxIndex > sxMaxWidth) {
-      rendered.x = chunks.x - (xMaxIndex - sxMaxWidth);
+    if (xsSafeMaxWidth !== indexSizeWidth && xMaxIndex > xsSafeMaxWidth) {
+      rendered.x = chunks.x - (xMaxIndex - xsSafeMaxWidth);
       xMax = position + rendered.x * _constants__WEBPACK_IMPORTED_MODULE_0__.PIXEL_SIZE;
     }
 
@@ -218,7 +214,7 @@ __webpack_require__.r(__webpack_exports__);
   (0,_canvas__WEBPACK_IMPORTED_MODULE_1__.drawText)(ctx, string);
   var size = {
     width: 80,
-    height: 60
+    height: 20
   };
   var image = ctx.getImageData(0, 0, size.width, size.height);
   var pixels = image.data;
@@ -227,18 +223,19 @@ __webpack_require__.r(__webpack_exports__);
   var count = 0;
   var chunks = {
     x: 9,
-    y: 4
+    y: 3
   };
 
   function loop() {
     var pixelChunks = (0,_pixels__WEBPACK_IMPORTED_MODULE_0__.getChunksOfPixelColor)(pixels, count, chunks, size);
-    var p = count / 4;
+    var p = count / _constants__WEBPACK_IMPORTED_MODULE_2__.PIXEL_SIZE;
     var y = Math.floor(p / size.width);
     var x = p - y * size.width;
     var imageData = new ImageData(Uint8ClampedArray.from(pixelChunks.colors), pixelChunks.x, pixelChunks.y);
     ctx.putImageData(imageData, oo + x, oo + y);
 
     if (count >= limit) {
+      console.log(count, limit, pixelChunks.y);
       return;
     }
 
