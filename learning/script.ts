@@ -1,20 +1,13 @@
+import { initCanvas } from "../canvas";
+
 const FONT_SIZE = 200;
-const EMPTY_PIXEL = [0,0,0,0];
+const EMPTY_PIXEL = [0, 0, 0, 0];
 const d = document.getElementById("debug");
 
 
-let animationId: number;
 
 (function name() {
-    const canvas = document.getElementById("canvas") as HTMLCanvasElement;
-    canvas.height = window.innerHeight/2;
-    canvas.width = window.innerWidth;
-    const ctx = canvas.getContext('2d');
-    const h = canvas.height;
-    const w = canvas.width;
-    const ww = w/2;
-    const hh = h/2;
-
+    const { ctx, h, w } = initCanvas();
     ctx.font = `900 ${FONT_SIZE}px Arial`;
     const string = "Hamza Iqbal";
     ctx.textBaseline = 'middle'; 
@@ -26,8 +19,6 @@ let animationId: number;
     const o = 100;
     var image = ctx.getImageData(0, 0, o, o);
     var pixels = image.data;
-
-    console.log(image);
 
     // ctx.putImageData({ ... }, w-100, h-100);
     const limit = o*o*4; 
@@ -53,7 +44,7 @@ let animationId: number;
                 break;
             }
         }
-        animationId = requestAnimationFrame(loop);
+        requestAnimationFrame(loop);
     }
 
 loop();
