@@ -1,9 +1,6 @@
 import { initCanvas } from "../canvas";
-
-const FONT_SIZE = 200;
-const EMPTY_PIXEL = [0, 0, 0, 0];
-const d = document.getElementById("debug");
-
+import { FONT_SIZE } from "../constants";
+import { getPixelColor, isEmptyPixel } from "../pixels";
 
 
 (function name() {
@@ -14,19 +11,17 @@ const d = document.getElementById("debug");
     ctx.textAlign = 'center';
 
     ctx.fillText(string, 0, 0);
-    // ctx.fillText(string, ww, hh);
 
     const o = 100;
     var image = ctx.getImageData(0, 0, o, o);
     var pixels = image.data;
 
-    // ctx.putImageData({ ... }, w-100, h-100);
     const limit = o*o*4; 
     const oo = 200;
     let count = 0;
     
     function loop() {
-        const color = getPixelColor(count);
+        const color = getPixelColor(pixels, count);
         console.log('trigger', count, limit, color);
         const p = count/4;
         const y = Math.floor(p/o);
@@ -38,7 +33,7 @@ const d = document.getElementById("debug");
         }
         count += 4;
         while(true) {
-            if (isEmptyPixel(getPixelColor(count))) {
+            if (isEmptyPixel(getPixelColor(pixels, count))) {
                 count+=4;
             } else {
                 break;
@@ -47,23 +42,5 @@ const d = document.getElementById("debug");
         requestAnimationFrame(loop);
     }
 
-loop();
-
-function getPixelColor(position) {
-    const color = [];
-    for (let j=0; j<4; j++) {
-        color.push(pixels[position+j]);
-    }
-    return color;
-}
-
+    loop();
 })();
-
-function isEmptyPixel(array) {
-    for (let i =0; i < EMPTY_PIXEL.length; i++) {
-        if (EMPTY_PIXEL[i] !== array[i]) {
-            return false;
-        }
-    }
-    return true;
-}
