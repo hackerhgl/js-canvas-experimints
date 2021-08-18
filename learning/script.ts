@@ -1,18 +1,14 @@
-import { initCanvas } from "../canvas";
-import { FONT_SIZE } from "../constants";
 import { getPixelColor, isEmptyPixel } from "../pixels";
+import { drawText, initCanvas } from "../canvas";
 
 
 (function name() {
     const { ctx, h, w } = initCanvas();
-    ctx.font = `900 ${FONT_SIZE}px Arial`;
     const string = "Hamza Iqbal";
-    ctx.textBaseline = 'middle'; 
-    ctx.textAlign = 'center';
-
-    ctx.fillText(string, 0, 0);
+    drawText(ctx, string);
 
     const o = 100;
+
     var image = ctx.getImageData(0, 0, o, o);
     var pixels = image.data;
 
