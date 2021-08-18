@@ -13,7 +13,8 @@ export function getChunksOfPixelColor(pixels:Uint8ClampedArray,  position: numbe
     const color: number[] = [];
     for (let y = 0; y < chunks.y; y++) {
         const yPosition = y * size.width * PIXEL_SIZE;
-        const xMax = chunks.x * PIXEL_SIZE;
+        const xMax = position + (chunks.x * PIXEL_SIZE);
+
         for (let x = position; x < xMax; x++) {
             const pixel = yPosition+x;
             color.push(pixels[pixel]);

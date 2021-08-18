@@ -1,1 +1,234 @@
-!function(){"use strict";var t=[,function(t,n,r){r.r(n),r.d(n,{getPixelColor:function(){return i},getChunksOfPixelColor:function(){return o},isEmptyPixel:function(){return a}});var e=r(2);function i(t,n){for(var r=[],i=0;i<e.PIXEL_SIZE;i++)r.push(t[n+i]);return r}function o(t,n,r,i){for(var o=[],a=0;a<r.y;a++)for(var u=a*i.width*e.PIXEL_SIZE,f=r.x*e.PIXEL_SIZE,c=n;c<f;c++){var d=u+c;o.push(t[d])}return o}function a(t){for(var n=0;n<e.EMPTY_PIXEL.length;n++)if(e.EMPTY_PIXEL[n]!==t[n])return!1;return!0}},function(t,n,r){r.r(n),r.d(n,{FONT_SIZE:function(){return e},EMPTY_PIXEL:function(){return i},PIXEL_SIZE:function(){return o}});var e=200,i=[0,0,0,0],o=4},function(t,n,r){r.r(n),r.d(n,{initCanvas:function(){return i},drawText:function(){return o}});var e=r(2);function i(t,n){var r=document.getElementById("canvas");r.height=t||window.innerHeight/2,r.width=n||window.innerWidth;var e=r.getContext("2d"),i=r.height,o=r.width;return{canvas:r,ctx:e,h:i,w:o,hh:i/2,ww:o/2}}function o(t,n,r,i){void 0===r&&(r=0),void 0===i&&(i=0),t.font="900 "+e.FONT_SIZE+"px Arial",t.textBaseline="middle",t.textAlign="center",t.fillText(n,r,i)}}],n={};function r(e){var i=n[e];if(void 0!==i)return i.exports;var o=n[e]={exports:{}};return t[e](o,o.exports,r),o.exports}r.d=function(t,n){for(var e in n)r.o(n,e)&&!r.o(t,e)&&Object.defineProperty(t,e,{enumerable:!0,get:n[e]})},r.o=function(t,n){return Object.prototype.hasOwnProperty.call(t,n)},r.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})};var e={};!function(){r.r(e);var t=r(1),n=r(3),i=r(2);!function(){var r=(0,n.initCanvas)(),e=r.ctx;r.h,r.w;(0,n.drawText)(e,"Hamza Iqbal");var o={width:100,height:100},a=e.getImageData(0,0,o.width,o.height).data,u=o.width*o.height*i.PIXEL_SIZE,f=0,c={x:20,y:40};!function(){var n=(0,t.getChunksOfPixelColor)(a,f,c,o);console.log(n);var r=f/4,i=Math.floor(r/o.width),d=r-i*o.width,l=new ImageData(Uint8ClampedArray.from(n),c.x,c.y);if(e.putImageData(l,200+d,200+i),!(f>=u))for(f+=4;(0,t.isEmptyPixel)((0,t.getPixelColor)(a,f));)f+=4}()}()}()}();
+/******/ (function() { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ([
+/* 0 */,
+/* 1 */
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "getPixelColor": function() { return /* binding */ getPixelColor; },
+/* harmony export */   "getChunksOfPixelColor": function() { return /* binding */ getChunksOfPixelColor; },
+/* harmony export */   "isEmptyPixel": function() { return /* binding */ isEmptyPixel; }
+/* harmony export */ });
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
+
+function getPixelColor(pixels, position) {
+  var color = [];
+
+  for (var j = 0; j < _constants__WEBPACK_IMPORTED_MODULE_0__.PIXEL_SIZE; j++) {
+    color.push(pixels[position + j]);
+  }
+
+  return color;
+}
+function getChunksOfPixelColor(pixels, position, chunks, size) {
+  var color = [];
+
+  for (var y = 0; y < chunks.y; y++) {
+    var yPosition = y * size.width * _constants__WEBPACK_IMPORTED_MODULE_0__.PIXEL_SIZE;
+    var xMax = position + chunks.x * _constants__WEBPACK_IMPORTED_MODULE_0__.PIXEL_SIZE;
+
+    for (var x = position; x < xMax; x++) {
+      var pixel = yPosition + x;
+      color.push(pixels[pixel]);
+    }
+  }
+
+  return color;
+}
+function isEmptyPixel(array) {
+  for (var i = 0; i < _constants__WEBPACK_IMPORTED_MODULE_0__.EMPTY_PIXEL.length; i++) {
+    if (_constants__WEBPACK_IMPORTED_MODULE_0__.EMPTY_PIXEL[i] !== array[i]) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+/***/ }),
+/* 2 */
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "FONT_SIZE": function() { return /* binding */ FONT_SIZE; },
+/* harmony export */   "EMPTY_PIXEL": function() { return /* binding */ EMPTY_PIXEL; },
+/* harmony export */   "PIXEL_SIZE": function() { return /* binding */ PIXEL_SIZE; }
+/* harmony export */ });
+var FONT_SIZE = 200;
+var EMPTY_PIXEL = [0, 0, 0, 0];
+var PIXEL_SIZE = 4;
+
+/***/ }),
+/* 3 */
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "initCanvas": function() { return /* binding */ initCanvas; },
+/* harmony export */   "drawText": function() { return /* binding */ drawText; }
+/* harmony export */ });
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
+
+function initCanvas(height, width) {
+  var canvas = document.getElementById("canvas");
+  canvas.height = height || window.innerHeight / 2;
+  canvas.width = width || window.innerWidth;
+  var ctx = canvas.getContext('2d');
+  var h = canvas.height;
+  var w = canvas.width;
+  var ww = w / 2;
+  var hh = h / 2;
+  return {
+    canvas: canvas,
+    ctx: ctx,
+    h: h,
+    w: w,
+    hh: hh,
+    ww: ww
+  };
+}
+function drawText(ctx, text, x, y) {
+  if (x === void 0) {
+    x = 0;
+  }
+
+  if (y === void 0) {
+    y = 0;
+  }
+
+  ctx.font = "900 " + _constants__WEBPACK_IMPORTED_MODULE_0__.FONT_SIZE + "px Arial";
+  ctx.textBaseline = 'middle';
+  ctx.textAlign = 'center';
+  ctx.fillText(text, x, y);
+}
+
+/***/ })
+/******/ 	]);
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	!function() {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	!function() {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = function(exports) {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+!function() {
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _pixels__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var _canvas__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2);
+
+
+
+
+(function name() {
+  var _a = (0,_canvas__WEBPACK_IMPORTED_MODULE_1__.initCanvas)(),
+      ctx = _a.ctx,
+      h = _a.h,
+      w = _a.w;
+
+  var string = "Hamza Iqbal";
+  (0,_canvas__WEBPACK_IMPORTED_MODULE_1__.drawText)(ctx, string);
+  var size = {
+    width: 80,
+    height: 80
+  };
+  var image = ctx.getImageData(0, 0, size.width, size.height);
+  var pixels = image.data;
+  var limit = size.width * size.height * _constants__WEBPACK_IMPORTED_MODULE_2__.PIXEL_SIZE;
+  var oo = 200;
+  var count = 0;
+  var chunks = {
+    x: 2,
+    y: 5
+  };
+
+  function loop() {
+    // console.log(count);
+    var colors = (0,_pixels__WEBPACK_IMPORTED_MODULE_0__.getChunksOfPixelColor)(pixels, count, chunks, size); // console.log(colors);
+
+    var p = count / 4;
+    var y = Math.floor(p / size.width);
+    var x = p - y * size.width;
+    var imageData = new ImageData(Uint8ClampedArray.from(colors), chunks.x, chunks.y);
+    ctx.putImageData(imageData, oo + x, oo + y);
+
+    if (count >= limit) {
+      return;
+    }
+
+    count += _constants__WEBPACK_IMPORTED_MODULE_2__.PIXEL_SIZE * chunks.x;
+    var yIndex = Math.floor(count / _constants__WEBPACK_IMPORTED_MODULE_2__.PIXEL_SIZE / size.width);
+
+    if (count == yIndex * size.width * _constants__WEBPACK_IMPORTED_MODULE_2__.PIXEL_SIZE) {
+      count += size.width * _constants__WEBPACK_IMPORTED_MODULE_2__.PIXEL_SIZE * (chunks.y - 1);
+    } // while(true) {
+    //     if (isEmptyPixel(getPixelColor(pixels, count))) {
+    //         count += PIXEL_SIZE;
+    //     } else {
+    //         break;
+    //     }
+    // }
+
+
+    requestAnimationFrame(loop);
+  }
+
+  loop();
+})();
+}();
+/******/ })()
+;
+//# sourceMappingURL=parsed-script.js.map
