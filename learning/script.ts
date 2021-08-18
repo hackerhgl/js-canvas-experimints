@@ -2,9 +2,6 @@ const FONT_SIZE = 200;
 const EMPTY_PIXEL = [0,0,0,0];
 const d = document.getElementById("debug");
 
-function c(...args) {
-    d.innerHTML=args.join(', ')
-}
 
 let animationId: number;
 
