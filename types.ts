@@ -9,3 +9,9 @@ export interface Size {
     height: number,
     width: number,
 }
+
+export interface ChunksOfPixel {
+    x: number;
+    y: number;
+    colors: number[];
+}

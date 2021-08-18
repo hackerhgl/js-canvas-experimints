@@ -12,6 +12,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "isEmptyPixel": function() { return /* binding */ isEmptyPixel; }
 /* harmony export */ });
 /* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
+var __assign = undefined && undefined.__assign || function () {
+  __assign = Object.assign || function (t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+      s = arguments[i];
+
+      for (var p in s) {
+        if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+      }
+    }
+
+    return t;
+  };
+
+  return __assign.apply(this, arguments);
+};
+
 
 function getPixelColor(pixels, position) {
   var color = [];
@@ -23,19 +39,38 @@ function getPixelColor(pixels, position) {
   return color;
 }
 function getChunksOfPixelColor(pixels, position, chunks, size) {
-  var color = [];
+  var colors = [];
+  var yMax = Math.min(chunks.y);
 
-  for (var y = 0; y < chunks.y; y++) {
+  var rendered = __assign({}, chunks);
+
+  var index = position / _constants__WEBPACK_IMPORTED_MODULE_0__.PIXEL_SIZE;
+
+  for (var y = 0; y < yMax; y++) {
     var yPosition = y * size.width * _constants__WEBPACK_IMPORTED_MODULE_0__.PIXEL_SIZE;
     var xMax = position + chunks.x * _constants__WEBPACK_IMPORTED_MODULE_0__.PIXEL_SIZE;
+    var xMaxIndex = xMax / 4;
+    var sxMax = Math.floor(xMaxIndex / size.width);
+    var sxMaxWidth = sxMax * size.width;
+    var xWidth = Math.floor(index / size.width);
+    var xMaxWidth = xWidth * size.width; // const safeWidth = ;
+
+    console.log('index:', index, xMaxIndex, xMax, size.width, 'w', xMaxWidth, sxMaxWidth);
+
+    if (sxMaxWidth !== xMaxWidth && xMaxIndex > sxMaxWidth) {
+      rendered.x = chunks.x - (xMaxIndex - sxMaxWidth);
+      xMax = position + rendered.x * _constants__WEBPACK_IMPORTED_MODULE_0__.PIXEL_SIZE;
+    }
 
     for (var x = position; x < xMax; x++) {
       var pixel = yPosition + x;
-      color.push(pixels[pixel]);
+      colors.push(pixels[pixel]);
     }
   }
 
-  return color;
+  return __assign(__assign({}, rendered), {
+    colors: colors
+  });
 }
 function isEmptyPixel(array) {
   for (var i = 0; i < _constants__WEBPACK_IMPORTED_MODULE_0__.EMPTY_PIXEL.length; i++) {
@@ -183,7 +218,7 @@ __webpack_require__.r(__webpack_exports__);
   (0,_canvas__WEBPACK_IMPORTED_MODULE_1__.drawText)(ctx, string);
   var size = {
     width: 80,
-    height: 80
+    height: 60
   };
   var image = ctx.getImageData(0, 0, size.width, size.height);
   var pixels = image.data;
@@ -191,25 +226,23 @@ __webpack_require__.r(__webpack_exports__);
   var oo = 200;
   var count = 0;
   var chunks = {
-    x: 2,
-    y: 5
+    x: 9,
+    y: 4
   };
 
   function loop() {
-    // console.log(count);
-    var colors = (0,_pixels__WEBPACK_IMPORTED_MODULE_0__.getChunksOfPixelColor)(pixels, count, chunks, size); // console.log(colors);
-
+    var pixelChunks = (0,_pixels__WEBPACK_IMPORTED_MODULE_0__.getChunksOfPixelColor)(pixels, count, chunks, size);
     var p = count / 4;
     var y = Math.floor(p / size.width);
     var x = p - y * size.width;
-    var imageData = new ImageData(Uint8ClampedArray.from(colors), chunks.x, chunks.y);
+    var imageData = new ImageData(Uint8ClampedArray.from(pixelChunks.colors), pixelChunks.x, pixelChunks.y);
     ctx.putImageData(imageData, oo + x, oo + y);
 
     if (count >= limit) {
       return;
     }
 
-    count += _constants__WEBPACK_IMPORTED_MODULE_2__.PIXEL_SIZE * chunks.x;
+    count += _constants__WEBPACK_IMPORTED_MODULE_2__.PIXEL_SIZE * pixelChunks.x;
     var yIndex = Math.floor(count / _constants__WEBPACK_IMPORTED_MODULE_2__.PIXEL_SIZE / size.width);
 
     if (count == yIndex * size.width * _constants__WEBPACK_IMPORTED_MODULE_2__.PIXEL_SIZE) {

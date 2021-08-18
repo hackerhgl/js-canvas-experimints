@@ -1,5 +1,6 @@
 import { EMPTY_PIXEL, PIXEL_SIZE, } from "./constants";
-import { Offset, Size } from "./types";
+import { minMax } from './utils';
+import { ChunksOfPixel, Offset, Size } from "./types";
 
 export function getPixelColor(pixels:Uint8ClampedArray,  position: number): number[] {
     const color: number[] = [];
@@ -9,18 +10,40 @@ export function getPixelColor(pixels:Uint8ClampedArray,  position: number): numb
     return color;
 }
 
-export function getChunksOfPixelColor(pixels:Uint8ClampedArray,  position: number, chunks: Offset, size: Size): number[] {
-    const color: number[] = [];
-    for (let y = 0; y < chunks.y; y++) {
+export function getChunksOfPixelColor(pixels:Uint8ClampedArray,  position: number, chunks: Offset, size: Size): ChunksOfPixel {
+    const colors: number[] = [];
+    const yMax = Math.min(chunks.y);
+    const rendered = {...chunks};
+    const index = position / PIXEL_SIZE;
+    for (let y = 0; y < yMax; y++) {
+
         const yPosition = y * size.width * PIXEL_SIZE;
-        const xMax = position + (chunks.x * PIXEL_SIZE);
+        let xMax = (position + (chunks.x * PIXEL_SIZE));
+
+        const xMaxIndex = xMax /4;
+        const sxMax = Math.floor(xMaxIndex/ size.width);
+        const sxMaxWidth = sxMax * size.width;
+        const xWidth = Math.floor(index/size.width);
+        const xMaxWidth = xWidth * size.width;
+        // const safeWidth = ;
+        console.log('index:', index, xMaxIndex, xMax, size.width, 'w', xMaxWidth,  sxMaxWidth);
+
+        if (sxMaxWidth !== xMaxWidth && xMaxIndex > sxMaxWidth) {
+            rendered.x = chunks.x - (xMaxIndex - sxMaxWidth) ;
+            xMax = position + (rendered.x * PIXEL_SIZE);
+
+            
+
+        }
 
         for (let x = position; x < xMax; x++) {
             const pixel = yPosition+x;
-            color.push(pixels[pixel]);
+            colors.push(pixels[pixel]);
         }
     }
-    return color;
+
+
+    return {...rendered,  colors} as ChunksOfPixel;
 }
 
 
