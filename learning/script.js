@@ -1,80 +1,71 @@
-const FONT_SIZE = 200;
-const EMPTY_PIXEL = [0,0,0,0];
-const d = document.getElementById("debug");
-
-function c(...args) {
-    d.innerHTML=args.join(', ')
+var FONT_SIZE = 200;
+var EMPTY_PIXEL = [0, 0, 0, 0];
+var d = document.getElementById("debug");
+function c() {
+    var args = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+    }
+    d.innerHTML = args.join(', ');
 }
-
-let animationId;
-
+var animationId;
 (function name() {
-    const canvas = document.getElementById("canvas");
-    canvas.height = window.innerHeight/2;
+    var canvas = document.getElementById("canvas");
+    canvas.height = window.innerHeight / 2;
     canvas.width = window.innerWidth;
-    ctx = canvas.getContext('2d');
-    const h = canvas.height;
-    const w = canvas.width;
-    const ww = w/2;
-    const hh = h/2;
-
-    ctx.font = `900 ${FONT_SIZE}px Arial`;
-    const string = "Hamza Iqbal";
-    ctx.textBaseline = 'middle'; 
+    var ctx = canvas.getContext('2d');
+    var h = canvas.height;
+    var w = canvas.width;
+    var ww = w / 2;
+    var hh = h / 2;
+    ctx.font = "900 " + FONT_SIZE + "px Arial";
+    var string = "Hamza Iqbal";
+    ctx.textBaseline = 'middle';
     ctx.textAlign = 'center';
-
     ctx.fillText(string, 0, 0);
     // ctx.fillText(string, ww, hh);
-
-    const o = 100;
+    var o = 100;
     var image = ctx.getImageData(0, 0, o, o);
     var pixels = image.data;
-
     console.log(image);
-
     // ctx.putImageData({ ... }, w-100, h-100);
-    const limit = o*o*4; 
-    const oo = 200;
-    count = 0;
-    countY = 0;
-    
+    var limit = o * o * 4;
+    var oo = 200;
+    var count = 0;
     function loop() {
-        const color = getPixelColor(count);
+        var color = getPixelColor(count);
         console.log('trigger', count, limit, color);
-        p = count/4;
-        y = Math.floor(p/o);
-        x = p - (y*o);
-        const imageData = new ImageData(Uint8ClampedArray.from(color), 1,1);
-        ctx.putImageData(imageData, oo+x,oo+y)
+        var p = count / 4;
+        var y = Math.floor(p / o);
+        var x = p - (y * o);
+        var imageData = new ImageData(Uint8ClampedArray.from(color), 1, 1);
+        ctx.putImageData(imageData, oo + x, oo + y);
         if (count >= limit) {
             return;
         }
         count += 4;
-
-        while(true) {
+        while (true) {
             if (isEmptyPixel(getPixelColor(count))) {
-                count+=4;
-            } else {
+                count += 4;
+            }
+            else {
                 break;
             }
         }
         animationId = requestAnimationFrame(loop);
     }
-
-loop();
-
-function getPixelColor(position) {
-    const color = [];
-    for (let j=0; j<4; j++) {
-        color.push(pixels[position+j]);
+    loop();
+    function getPixelColor(position) {
+        var color = [];
+        for (var j = 0; j < 4; j++) {
+            color.push(pixels[position + j]);
+        }
+        return color;
     }
-    return color;
-}
-
 })();
 
 function isEmptyPixel(array) {
-    for (let i =0; i < EMPTY_PIXEL.length; i++) {
+    for (var i = 0; i < EMPTY_PIXEL.length; i++) {
         if (EMPTY_PIXEL[i] !== array[i]) {
             return false;
         }
