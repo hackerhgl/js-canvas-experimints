@@ -26,7 +26,7 @@ let animationId;
     ctx.fillText(string, 0, 0);
     // ctx.fillText(string, ww, hh);
 
-    const o = 40;
+    const o = 100;
     var image = ctx.getImageData(0, 0, o, o);
     var pixels = image.data;
 
