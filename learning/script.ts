@@ -1,7 +1,8 @@
-import { getPixelColor, isEmptyPixel } from "../pixels";
+import { getChunksOfPixelColor, getPixelColor, isEmptyPixel } from "../pixels";
 import { drawText, initCanvas } from "../canvas";
+import { Offset, Size } from "../types";
+import { PIXEL_SIZE } from "../constants";
 
-const PIXEL_SIZE = 4;
 
 
 (function name() {
@@ -9,24 +10,26 @@ const PIXEL_SIZE = 4;
     const string = "Hamza Iqbal";
     drawText(ctx, string);
 
-    const offset = {x: 20, y: 100};
+    const size: Size = {width: 20, height: 100};
 
-    var image = ctx.getImageData(0, 0, offset.x, offset.y);
+    var image = ctx.getImageData(0, 0, size.width, size.height);
     console.log(image);
     
     var pixels = image.data;
 
-    const limit = offset.x*offset.y*PIXEL_SIZE; 
+    const limit = size.width*size.height*PIXEL_SIZE; 
     const oo = 200;
     let count = 0;
-    const chunks = {x:1, y: 1}; 
+    const chunks: Offset = {x:4, y: 1}; 
     
     function loop() {
-        const color = getPixelColor(pixels, count);
+        const colors = getChunksOfPixelColor(pixels, count, chunks, size);
+        console.log(colors);
+        
         const p = count/4;
-        const y = Math.floor(p/offset.x);
-        const x = p - (y*offset.x);
-        const imageData = new ImageData(Uint8ClampedArray.from(color), 1, 1);
+        const y = Math.floor(p/size.width);
+        const x = p - (y*size.width);
+        const imageData = new ImageData(Uint8ClampedArray.from(colors), chunks.x, 1);
         ctx.putImageData(imageData, oo+x,oo+y)
         if (count >= limit) {
             return;
