@@ -27,14 +27,12 @@ import { PIXEL_SIZE } from "../constants";
         const p = count/PIXEL_SIZE;
         const y = Math.floor(p/size.width);
         const x = p - (y*size.width);
-
-
         const imageData = new ImageData(Uint8ClampedArray.from(pixelChunks.colors), pixelChunks.x, pixelChunks.y);
-        ctx.putImageData(imageData, oo+x,oo+y)
 
+        ctx.putImageData(imageData, oo+x,oo+y)
         count += PIXEL_SIZE * pixelChunks.x;
+
         const yIndex = Math.floor((count/PIXEL_SIZE)/size.width);
-        
         if (count == yIndex*size.width*PIXEL_SIZE) {
             // console.log('INCREMENT', pixelChunks);
             

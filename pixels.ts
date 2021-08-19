@@ -1,5 +1,4 @@
 import { EMPTY_PIXEL, PIXEL_SIZE, } from "./constants";
-import { minMax } from './utils';
 import { ChunksOfPixel, Offset, Size } from "./types";
 
 export function getPixelColor(pixels:Uint8ClampedArray,  position: number): number[] {
@@ -39,8 +38,6 @@ export function getChunksOfPixelColor(pixels:Uint8ClampedArray,  position: numbe
             colors.push(pixels[pixel]);
         }
     }
-
-
     return {...rendered,  colors} as ChunksOfPixel;
 }
 
