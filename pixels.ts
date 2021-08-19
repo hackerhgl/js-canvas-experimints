@@ -12,19 +12,23 @@ export function getPixelColor(pixels:Uint8ClampedArray,  position: number): numb
 
 export function getChunksOfPixelColor(pixels:Uint8ClampedArray,  position: number, chunks: Offset, size: Size): ChunksOfPixel {
     const colors: number[] = [];
-    const yMax = Math.min(chunks.y);
+    let yMax = chunks.y;
     const rendered = {...chunks};
     const index = position / PIXEL_SIZE;
-    const indexSizeWidth = Math.floor(index/size.width) * size.width;
+    const indexWidth = Math.floor(index/size.width);
+    const indexSizeWidth = indexWidth * size.width;
+    const ysMax = yMax + indexWidth;
+    if (ysMax > size.height) {
+        rendered.y = chunks.y - (ysMax - size.height)
+        yMax = rendered.y;
+    }
 
     for (let y = 0; y < yMax; y++) {
         const yPosition = y * size.width * PIXEL_SIZE;
         let xMax = (position + (chunks.x * PIXEL_SIZE));
-
         const xMaxIndex = xMax / PIXEL_SIZE;
         const xsSafeMaxWidth = Math.floor(xMaxIndex / size.width) * size.width;
         
-
         if (xsSafeMaxWidth !== indexSizeWidth && xMaxIndex > xsSafeMaxWidth) {
             rendered.x = chunks.x - (xMaxIndex - xsSafeMaxWidth) ;
             xMax = position + (rendered.x * PIXEL_SIZE);

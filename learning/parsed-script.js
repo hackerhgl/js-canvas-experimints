@@ -40,12 +40,19 @@ function getPixelColor(pixels, position) {
 }
 function getChunksOfPixelColor(pixels, position, chunks, size) {
   var colors = [];
-  var yMax = Math.min(chunks.y);
+  var yMax = chunks.y;
 
   var rendered = __assign({}, chunks);
 
   var index = position / _constants__WEBPACK_IMPORTED_MODULE_0__.PIXEL_SIZE;
-  var indexSizeWidth = Math.floor(index / size.width) * size.width;
+  var indexWidth = Math.floor(index / size.width);
+  var indexSizeWidth = indexWidth * size.width;
+  var ysMax = yMax + indexWidth;
+
+  if (ysMax > size.height) {
+    rendered.y = chunks.y - (ysMax - size.height);
+    yMax = rendered.y;
+  }
 
   for (var y = 0; y < yMax; y++) {
     var yPosition = y * size.width * _constants__WEBPACK_IMPORTED_MODULE_0__.PIXEL_SIZE;
@@ -213,37 +220,37 @@ __webpack_require__.r(__webpack_exports__);
   var string = "Hamza Iqbal";
   (0,_canvas__WEBPACK_IMPORTED_MODULE_1__.drawText)(ctx, string);
   var size = {
-    width: 80,
-    height: 20
+    width: 300,
+    height: 100
   };
   var image = ctx.getImageData(0, 0, size.width, size.height);
   var pixels = image.data;
   var limit = size.width * size.height * _constants__WEBPACK_IMPORTED_MODULE_2__.PIXEL_SIZE;
-  var oo = 200;
+  var oo = 100;
   var count = 0;
   var chunks = {
-    x: 9,
-    y: 3
+    x: 25,
+    y: 21
   };
 
   function loop() {
+    if (count >= limit) {
+      console.log(count, limit, count / _constants__WEBPACK_IMPORTED_MODULE_2__.PIXEL_SIZE / size.width);
+      return;
+    }
+
     var pixelChunks = (0,_pixels__WEBPACK_IMPORTED_MODULE_0__.getChunksOfPixelColor)(pixels, count, chunks, size);
     var p = count / _constants__WEBPACK_IMPORTED_MODULE_2__.PIXEL_SIZE;
     var y = Math.floor(p / size.width);
     var x = p - y * size.width;
     var imageData = new ImageData(Uint8ClampedArray.from(pixelChunks.colors), pixelChunks.x, pixelChunks.y);
     ctx.putImageData(imageData, oo + x, oo + y);
-
-    if (count >= limit) {
-      console.log(count, limit, pixelChunks.y);
-      return;
-    }
-
     count += _constants__WEBPACK_IMPORTED_MODULE_2__.PIXEL_SIZE * pixelChunks.x;
     var yIndex = Math.floor(count / _constants__WEBPACK_IMPORTED_MODULE_2__.PIXEL_SIZE / size.width);
 
     if (count == yIndex * size.width * _constants__WEBPACK_IMPORTED_MODULE_2__.PIXEL_SIZE) {
-      count += size.width * _constants__WEBPACK_IMPORTED_MODULE_2__.PIXEL_SIZE * (chunks.y - 1);
+      // console.log('INCREMENT', pixelChunks);
+      count += size.width * _constants__WEBPACK_IMPORTED_MODULE_2__.PIXEL_SIZE * (pixelChunks.y - 1);
     } // while(true) {
     //     if (isEmptyPixel(getPixelColor(pixels, count))) {
     //         count += PIXEL_SIZE;
